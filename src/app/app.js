@@ -5,7 +5,6 @@ import ErrorPage from '../pages/error-page';
 import HomePage from '../pages/home-page';
 import SignInPage from '../pages/sign-in-page';
 import SignUpPage from '../pages/sign-up-page';
-
 import Layout from '../components/layout';
 
 import './app.scss';
@@ -25,4 +24,3 @@ export default function App() {
     </div>
   );
 }
-

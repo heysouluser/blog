@@ -7,15 +7,11 @@ export default function Header() {
     <header>
       <NavLink to="/">Realworld Blog</NavLink>
       <NavLink to="/sign-in">
-        <button type='button'>
-          Sign In
-        </button>
+        <button type="button">Sign In</button>
       </NavLink>
       <NavLink to="/sign-up">
-        <button type='button'>
-          Sign Up
-        </button>
+        <button type="button">Sign Up</button>
       </NavLink>
     </header>
-  )
+  );
 }
