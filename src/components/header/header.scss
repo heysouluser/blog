@@ -1,0 +1,45 @@
+$green: #52C41A;
+$blue: #1890FF;
+@mixin hover-blue {
+  transition: all 0.3s ease 0s;
+    &:hover {
+      color: $blue;
+    }
+}
+
+.blog__header {
+  background-color: #fff;
+  height: 80px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 22px;
+  font-size: 18px;
+}
+
+.blog__logo {
+  @include hover-blue;
+}
+
+.blog__nav-buttons {
+}
+
+.blog__sign-in {
+  font-size: 18px;
+  width: 84px;
+  margin-right: 20px;
+  @include hover-blue;
+}
+
+.blog__sign-up {
+  width: 110px;
+  height: 50px;
+  color: $green;
+  border: 1px solid $green;
+  border-radius: 5px;
+  font-size: 18px;
+  @include hover-blue;
+  &:hover {
+    border: 1px solid $blue;
+  }
+}

@@ -1,0 +1,17 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter&family=Roboto:wght@400;500&display=swap');
+
+* {
+  font-family: 'Inter', sans-serif;
+  // font-family: 'Roboto', sans-serif;
+}
+
+.blog {
+  min-height: 100vh;
+  background-color: #EBEEF3;
+}
+
+.blog__main {
+  max-width: 938px;
+  margin: 26px auto 0;
+  padding-bottom: 20px;
+}

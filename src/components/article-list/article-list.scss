@@ -1,0 +1,25 @@
+.blog__article-list {
+  display: flex;
+  flex-direction: column;
+  row-gap: 20px;
+  margin-bottom: 26px;
+  & .blog__article {
+      background-color: #fff;
+      padding: 15px 15px 24px;
+      font-size: 12px;
+    }
+}
+
+.blog__pagination {
+  text-align: center;
+}
+
+.ant-spin {
+  margin: 0px auto;
+}
+
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

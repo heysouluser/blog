@@ -1,3 +1,3 @@
-import CreateArticlePage from "./create-article-page";
+import CreateArticlePage from './create-article-page';
 
 export default CreateArticlePage;

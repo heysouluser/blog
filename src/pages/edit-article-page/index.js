@@ -1,3 +1,3 @@
-import EditArticlePage from "./edit-article-page";
+import EditArticlePage from './edit-article-page';
 
 export default EditArticlePage;

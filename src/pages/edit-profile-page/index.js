@@ -1,3 +1,3 @@
-import EditProfilePage from "./edit-profile-page";
+import EditProfilePage from './edit-profile-page';
 
 export default EditProfilePage;
