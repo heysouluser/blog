@@ -19,7 +19,6 @@ export const getArticles = async (token, offset) => {
   const response = await fetch(`${url}articles?offset=${offset}&limit=5`, requestOptions(token));
   handleResponseError(url, response);
   const body = await response.json();
-  console.log(body);
   return body;
 };
 

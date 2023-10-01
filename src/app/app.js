@@ -6,6 +6,7 @@ import HomePage from '../pages/home-page';
 import SignInPage from '../pages/sign-in-page';
 import SignUpPage from '../pages/sign-up-page';
 import Layout from '../components/layout';
+import EditProfilePage from '../pages/edit-profile-page';
 
 import './app.scss';
 
@@ -19,6 +20,7 @@ export default function App() {
           <Route path="/articles/:slug" element={<ArticlePage />} />
           <Route path="/sign-in" element={<SignInPage />} />
           <Route path="/sign-up" element={<SignUpPage />} />
+          <Route path="/profile" element={<EditProfilePage />} />
           <Route path="*" element={<ErrorPage />} />
         </Route>
       </Routes>

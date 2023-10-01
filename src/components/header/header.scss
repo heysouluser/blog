@@ -24,14 +24,14 @@ $blue: #1890FF;
 .blog__nav-buttons {
 }
 
-.blog__sign-in {
+.blog__sign-in-btn {
   font-size: 18px;
   width: 84px;
   margin-right: 20px;
   @include hover-blue;
 }
 
-.blog__sign-up {
+.blog__sign-up-btn {
   width: 110px;
   height: 50px;
   color: $green;

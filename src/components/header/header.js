@@ -10,12 +10,12 @@ export default function Header() {
       </NavLink>
       <div className="blog__nav-buttons">
         <NavLink to="/sign-in">
-          <button type="button" className="blog__sign-in">
+          <button type="button" className="blog__sign-in-btn">
             Sign In
           </button>
         </NavLink>
         <NavLink to="/sign-up">
-          <button type="button" className="blog__sign-up">
+          <button type="button" className="blog__sign-up-btn">
             Sign Up
           </button>
         </NavLink>
