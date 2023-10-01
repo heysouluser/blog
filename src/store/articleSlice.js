@@ -1,6 +1,6 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
 
-import { getArticles, getArticle } from '../api/articles-api';
+import { fetchArticles, fetchArticle } from '../api/async-actions';
 
 const initialState = {
   articles: [],
@@ -10,28 +10,6 @@ const initialState = {
   status: false,
   error: null,
 };
-
-export const fetchArticles = createAsyncThunk(
-  'articles/fetchArticles',
-  async ({ token, offset }, { rejectWithValue }) => {
-    try {
-      const articles = await getArticles(token, offset);
-      return articles;
-    } catch (error) {
-      return rejectWithValue(error.message);
-    }
-  }
-);
-
-export const fetchArticle = createAsyncThunk('articles/fetchArticle', async ({ token, slug }, { rejectWithValue }) => {
-  try {
-    const article = await getArticle(token, slug);
-    console.log(article);
-    return article;
-  } catch (error) {
-    return rejectWithValue(error.message);
-  }
-});
 
 const articleSlice = createSlice({
   name: 'articles',
@@ -68,6 +46,7 @@ const articleSlice = createSlice({
         state.article = action.payload.article;
       })
       .addCase(fetchArticle.rejected, (state, action) => {
+        state.status = 'failed';
         state.error = action.payload;
       });
   },

@@ -8,7 +8,7 @@ import ReactMarkdown from 'react-markdown';
 
 import './article-page.scss';
 import like from '../../images/heart.svg';
-import { fetchArticle } from '../../store/articleSlice';
+import { fetchArticle } from '../../api/async-actions';
 
 export default function ArticlePage() {
   const dispatch = useDispatch();

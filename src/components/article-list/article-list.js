@@ -3,7 +3,8 @@ import { useEffect } from 'react';
 import { Pagination, Spin } from 'antd';
 
 import Article from '../article';
-import { fetchArticles, setOffset } from '../../store/articleSlice';
+import { fetchArticles } from '../../api/async-actions';
+import { setOffset } from '../../store/articleSlice';
 import './article-list.scss';
 
 export default function ArticleList() {
