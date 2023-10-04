@@ -22,10 +22,14 @@ $blue: #1890FF;
 }
 
 .blog__nav-buttons {
+  display:flex;
+  column-gap: 10px;
+  align-items: center;
 }
 
 .blog__sign-in-btn {
   font-size: 18px;
+  height: 50px;
   width: 84px;
   margin-right: 20px;
   @include hover-blue;
@@ -41,5 +45,45 @@ $blue: #1890FF;
   @include hover-blue;
   &:hover {
     border: 1px solid $blue;
+  }
+}
+
+.create-btn {
+  width: 150px;
+  height: 30px;
+  margin-right: 10px;
+}
+
+.profile-btn {
+  min-width: 150px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: none;
+  margin-right: 10px;
+  color: #403f3f;
+  &:hover {
+    border: none;
+  }
+  & div {
+    margin-right: 10px;
+  }
+  & img {
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    transition: all 0.3s ease 0s;
+    &:hover {
+      transform: scale(1.1);
+    }
+  }
+}
+
+.log-out-btn {
+  color: black;
+  border: 1px solid black;
+  &:hover {
+    color: red;
+    border: 1px solid red;
   }
 }
