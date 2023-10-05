@@ -1,5 +1,5 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
-import { useEffect } from 'react';
+import { useEffect, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import ArticlePage from '../pages/article-page';
@@ -10,6 +10,7 @@ import SignUpPage from '../pages/sign-up-page';
 import Layout from '../components/layout';
 import EditProfilePage from '../pages/edit-profile-page';
 import CreateArticlePage from '../pages/create-article-page';
+import EditArticlePage from '../pages/edit-article-page';
 import { getCurrentUser } from '../api/user-api';
 import { logIn, setUser } from '../store/userSlice';
 
@@ -19,26 +20,30 @@ export default function App() {
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.userSlice);
 
-  useEffect(() => {
-    const tokenAuth = JSON.parse(localStorage.getItem('currentUser'));
+  const tokenAuth = JSON.parse(localStorage.getItem('currentUser'));
 
-    const getCurrentUserHandler = async () => {
-      if (tokenAuth) {
-        const currentUser = await getCurrentUser(tokenAuth);
-        if (currentUser) {
-          dispatch(logIn(true));
-
-          const updatedUser = { ...currentUser.user };
-          console.log(updatedUser);
-          dispatch(setUser(updatedUser));
-        }
+  const getCurrentUserHandler = useCallback(async () => {
+    if (tokenAuth) {
+      const currentUser = await getCurrentUser(tokenAuth);
+      if (currentUser) {
+        console.log();
+        dispatch(logIn(true));
+        dispatch(
+          setUser({
+            ...currentUser.user,
+            bio: currentUser.user.bio || 'start up',
+            image: currentUser.user.image || 'https://static.productionready.io/images/smiley-cyrus.jpg',
+          })
+        );
       }
-    };
+    }
+  }, [dispatch, tokenAuth]);
 
+  useEffect(() => {
     if (Object.keys(user).length === 0) {
       getCurrentUserHandler();
     }
-  }, [dispatch, user]);
+  }, [dispatch, user, getCurrentUserHandler]);
 
   return (
     <div className="blog">
@@ -47,6 +52,7 @@ export default function App() {
           <Route index element={<HomePage />} />
           <Route path="/articles" element={<Navigate to="/" replace />} />
           <Route path="/articles/:slug" element={<ArticlePage />} />
+          <Route path="/articles/:slug/edit" element={<EditArticlePage />} />
           <Route path="/sign-in" element={<SignInPage />} />
           <Route path="/sign-up" element={<SignUpPage />} />
           <Route path="/profile" element={<EditProfilePage />} />

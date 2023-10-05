@@ -73,11 +73,23 @@
   &__author-pic {
     width: 46px;
     height: 46px;
+    & img {
+      border-radius: 50%;
+    }
   }
 
   &__body {
     color: rgba($color: #000000, $alpha: 0.75);
+    font-size: 18px;
     line-height: 22px;
     max-width: 680px;
+    margin-top: 25px;
+  }
+
+  &__description {
+    margin-top: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
   }
 }

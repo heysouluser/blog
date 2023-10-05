@@ -1,5 +1,5 @@
 import { useSelector, useDispatch } from 'react-redux';
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import { useEffect } from 'react';
 import { format, parseISO } from 'date-fns';
 import { Spin } from 'antd';
@@ -14,6 +14,7 @@ export default function ArticlePage() {
   const dispatch = useDispatch();
   const { slug } = useParams();
   const { article, status } = useSelector((state) => state.articleSlice);
+  const { user } = useSelector((state) => state.userSlice);
 
   const token = JSON.parse(localStorage.getItem('currentUser'));
 
@@ -30,8 +31,9 @@ export default function ArticlePage() {
   }
 
   if (status === 'succeeded' && article) {
-    const { body, createdAt, tagList, title, author, favoritesCount } = article;
+    const { body, createdAt, tagList, title, author, favoritesCount, description } = article;
     const articleDate = format(parseISO(createdAt), 'MMMM d, y');
+    const isAuth = user.username === author.username;
 
     return (
       <li className="blog__article article">
@@ -66,6 +68,21 @@ export default function ArticlePage() {
           <div className="article__author-pic">
             <img src={author.image} alt="author" />
           </div>
+        </div>
+        <div className="article__description">
+          <div className="article__description-box">{description}</div>
+          {isAuth && (
+            <div>
+              <button type="button" className="article__btn article__btn-delete">
+                Delete
+              </button>
+              <Link to={`/articles/${slug}/edit`}>
+                <button type="button" className="article__btn">
+                  Edit
+                </button>
+              </Link>
+            </div>
+          )}
         </div>
         <div className="article__body">
           <ReactMarkdown>{body}</ReactMarkdown>

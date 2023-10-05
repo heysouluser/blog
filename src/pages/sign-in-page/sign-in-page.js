@@ -1,18 +1,19 @@
 import { useForm } from 'react-hook-form';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Spin } from 'antd';
 import './sign-in-page.scss';
 
 import { loginUser } from '../../api/user-api';
-import { logIn } from '../../store/userSlice';
+import { logIn, setUser } from '../../store/userSlice';
 
 export default function SignInPage() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
+  const { user } = useSelector((state) => state.userSlice);
 
   const {
     register,
@@ -26,14 +27,25 @@ export default function SignInPage() {
     setIsLoading(true);
     const fetchLogin = await loginUser({ user: data });
     console.log(fetchLogin);
-    const { user } = fetchLogin;
-    if (user) {
-      localStorage.setItem('currentUser', JSON.stringify(user.token));
+    const { user: newUser } = fetchLogin;
+    console.log(newUser);
+
+    if (newUser) {
+      const mergedUser = {
+        ...newUser,
+        bio: user.bio,
+        image: user.image,
+      };
+
+      localStorage.setItem('currentUser', JSON.stringify(mergedUser.token));
+      dispatch(setUser(mergedUser));
       dispatch(logIn(true));
       setIsError(false);
       navigate('/');
+    } else {
+      setIsError(true);
     }
-    setIsError(true);
+
     setIsLoading(false);
   };
 

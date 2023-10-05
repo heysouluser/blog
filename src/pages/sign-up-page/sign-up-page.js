@@ -28,15 +28,6 @@ export default function SignUpPage() {
   const [emailError, setEmailError] = useState('');
 
   const handleSuccessfulSignUp = (data, fetchReg) => {
-    localStorage.setItem('currentUser', JSON.stringify(fetchReg.user.token));
-
-    loginUser({
-      user: {
-        email: data.email,
-        password: data.password,
-      },
-    });
-
     dispatch(
       setUser({
         username: data.username,
@@ -45,6 +36,15 @@ export default function SignUpPage() {
         image: 'https://static.productionready.io/images/smiley-cyrus.jpg',
       })
     );
+
+    loginUser({
+      user: {
+        email: data.email,
+        password: data.password,
+      },
+    });
+    console.log(fetchReg.user);
+    localStorage.setItem('currentUser', JSON.stringify(fetchReg.user.token));
 
     dispatch(logIn(true));
   };

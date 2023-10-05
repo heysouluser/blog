@@ -1,13 +1,12 @@
 import { Link } from 'react-router-dom';
 import { format, parseISO } from 'date-fns';
 import uniqid from 'uniqid';
-import ReactMarkdown from 'react-markdown';
 
 import './article.scss';
 import like from '../../images/heart.svg';
 
 export default function Article({ article }) {
-  const { body, createdAt, tagList, title, author, favoritesCount, slug } = article;
+  const { createdAt, tagList, title, author, favoritesCount, slug, description } = article;
   const articleDate = format(parseISO(createdAt), 'MMMM d, y');
 
   return (
@@ -46,9 +45,7 @@ export default function Article({ article }) {
           <img src={author.image} alt="author" />
         </div>
       </div>
-      <div className="article__body">
-        <ReactMarkdown>{body}</ReactMarkdown>
-      </div>
+      <div className="article__description">{description}</div>
     </li>
   );
 }
