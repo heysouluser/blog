@@ -7,7 +7,7 @@ import { Spin } from 'antd';
 import './article-form.scss';
 import ErrorPage from '../../pages/error-page';
 
-export default function ArticleForm({ title, isLoading, onSubmitNewArticle }) {
+export default function ArticleForm({ articleTitle, isLoading, onSubmitArticle, body, tagList, title, description }) {
   const { isLogIn } = useSelector((state) => state.userSlice);
   const {
     register,
@@ -17,7 +17,7 @@ export default function ArticleForm({ title, isLoading, onSubmitNewArticle }) {
     mode: 'onBlur',
   });
 
-  const [newTags, setNewTags] = useState([]);
+  const [newTags, setNewTags] = useState(tagList);
 
   const addTag = (tag) => {
     if (!tag.trim()) {
@@ -54,12 +54,8 @@ export default function ArticleForm({ title, isLoading, onSubmitNewArticle }) {
       <>
         {spin}
         <div className="blog__form form article-form">
-          <h2 className="form__title">{title}</h2>
-          <form
-            className="form__form"
-            id="send-form"
-            onSubmit={handleSubmit((data) => onSubmitNewArticle(data, newTags))}
-          >
+          <h2 className="form__title">{articleTitle}</h2>
+          <form className="form__form" id="send-form" onSubmit={handleSubmit((data) => onSubmitArticle(data, newTags))}>
             <label className="form__label">
               Title
               <input
@@ -69,6 +65,7 @@ export default function ArticleForm({ title, isLoading, onSubmitNewArticle }) {
                 {...register('title', {
                   required: 'Поле обязательно к заполнению',
                 })}
+                defaultValue={title}
               />
               {validateErr('title')}
             </label>
@@ -81,6 +78,7 @@ export default function ArticleForm({ title, isLoading, onSubmitNewArticle }) {
                 {...register('description', {
                   required: 'Поле обязательно к заполнению',
                 })}
+                defaultValue={description}
               />
               {validateErr('description')}
             </label>
@@ -92,6 +90,7 @@ export default function ArticleForm({ title, isLoading, onSubmitNewArticle }) {
                 {...register('body', {
                   required: 'Поле обязательно к заполнению',
                 })}
+                defaultValue={body}
               />
               {validateErr('body')}
             </label>

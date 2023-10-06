@@ -12,7 +12,6 @@ export const handleResponseError = (requestUrl, response) => {
   if (!response.ok) {
     throw new Error(`Could not fetch ${requestUrl}, received ${response.status}`);
   }
-  return response;
 };
 
 export const getArticles = async (token, offset) => {
@@ -28,13 +27,6 @@ export const getArticle = async (token, slug) => {
   const body = await response.json();
   return body;
 };
-
-// export const fetchArticle = async (slug, token) => {
-//   const response = await fetch(`${url}articles/${slug}`, requestOptions(token));
-//   handleResponseError(url, response);
-//   const body = await response.json();
-//   return body;
-// };
 
 export const createArticle = async (data, token) => {
   const options = {
@@ -66,4 +58,20 @@ export const updateArticle = async (data, token, slug) => {
   handleResponseError(url, response);
   const json = await response.json();
   return json;
+};
+
+export const deleteArticle = async (token, slug) => {
+  const options = {
+    method: 'DELETE',
+    headers: {
+      Authorization: `Token ${token}`,
+      accept: 'application/json',
+      'Content-Type': 'application/json;charset=utf-8',
+    },
+  };
+  try {
+    await fetch(`${url}articles/${slug}`, options);
+  } catch (err) {
+    throw new Error(`Could not fetch, received ${err}`);
+  }
 };

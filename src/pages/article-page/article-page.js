@@ -1,26 +1,43 @@
 import { useSelector, useDispatch } from 'react-redux';
-import { useParams, Link } from 'react-router-dom';
-import { useEffect } from 'react';
+import { useParams, Link, useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
 import { format, parseISO } from 'date-fns';
-import { Spin } from 'antd';
+import { Spin, Modal } from 'antd';
 import uniqid from 'uniqid';
 import ReactMarkdown from 'react-markdown';
 
 import './article-page.scss';
 import like from '../../images/heart.svg';
 import { fetchArticle } from '../../api/async-actions';
+import { deleteArticle } from '../../api/articles-api';
 
 export default function ArticlePage() {
   const dispatch = useDispatch();
   const { slug } = useParams();
+  const navigate = useNavigate();
   const { article, status } = useSelector((state) => state.articleSlice);
   const { user } = useSelector((state) => state.userSlice);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const token = JSON.parse(localStorage.getItem('currentUser'));
 
   useEffect(() => {
     dispatch(fetchArticle({ token, slug }));
   }, [dispatch, slug, token]);
+
+  const showModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleOk = () => {
+    deleteArticle(token, slug);
+    setIsModalOpen(false);
+    navigate('/');
+  };
+
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
 
   if (status === 'loading') {
     return (
@@ -73,14 +90,21 @@ export default function ArticlePage() {
           <div className="article__description-box">{description}</div>
           {isAuth && (
             <div>
-              <button type="button" className="article__btn article__btn-delete">
+              <button type="button" className="article__btn article__btn-delete" onClick={showModal}>
                 Delete
               </button>
+
               <Link to={`/articles/${slug}/edit`}>
                 <button type="button" className="article__btn">
                   Edit
                 </button>
               </Link>
+              <Modal
+                title="Are you sure you want to delete this article?"
+                open={isModalOpen}
+                onOk={handleOk}
+                onCancel={handleCancel}
+              />
             </div>
           )}
         </div>
