@@ -12,7 +12,6 @@ export const handleResponseError = (requestUrl, response) => {
   if (!response.ok) {
     throw new Error(`Could not fetch ${requestUrl}, received ${response.status}`);
   }
-  return response;
 };
 
 export const getArticles = async (token, offset) => {
