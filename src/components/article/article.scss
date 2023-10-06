@@ -44,10 +44,12 @@
 
   &__likes {
     display: flex;
+    align-items: center;
+  }
 
-    & img {
-      margin-right: 5px;
-    }
+  &__like {
+    margin-right: 5px;
+    margin-top: -3px;
   }
 
   &__quantity-likes {}

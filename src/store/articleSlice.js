@@ -21,6 +21,31 @@ const articleSlice = createSlice({
     setOffset(state, action) {
       state.articleListOffset = action.payload;
     },
+    toggleFavorite(state, action) {
+      const { slug } = action.payload;
+      const updatedArticles = state.articles.map((article) => {
+        if (article.slug === slug) {
+          return {
+            ...article,
+            favorited: !article.favorited,
+            favoritesCount: article.favorited ? article.favoritesCount - 1 : article.favoritesCount + 1,
+          };
+        }
+        return article;
+      });
+
+      return {
+        ...state,
+        articles: updatedArticles,
+      };
+    },
+    toggleFavoriteSingle(state) {
+      state.article = {
+        ...state.article,
+        favorited: !state.article.favorited,
+        favoritesCount: state.article.favorited ? state.article.favoritesCount - 1 : state.article.favoritesCount + 1,
+      };
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -52,5 +77,5 @@ const articleSlice = createSlice({
   },
 });
 
-export const { addArticles, setOffset } = articleSlice.actions;
+export const { addArticles, setOffset, toggleFavorite, toggleFavoriteSingle } = articleSlice.actions;
 export default articleSlice.reducer;

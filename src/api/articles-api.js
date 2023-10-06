@@ -33,7 +33,7 @@ export const createArticle = async (data, token) => {
     method: 'POST',
     headers: {
       Authorization: `Token ${token}`,
-      accept: 'application/json',
+      Accept: 'application/json',
       'Content-Type': 'application/json;charset=utf-8',
     },
     body: JSON.stringify(data),
@@ -49,7 +49,7 @@ export const updateArticle = async (data, token, slug) => {
     method: 'PUT',
     headers: {
       Authorization: `Token ${token}`,
-      accept: 'application/json',
+      Accept: 'application/json',
       'Content-Type': 'application/json;charset=utf-8',
     },
     body: JSON.stringify(data),
@@ -65,7 +65,7 @@ export const deleteArticle = async (token, slug) => {
     method: 'DELETE',
     headers: {
       Authorization: `Token ${token}`,
-      accept: 'application/json',
+      Accept: 'application/json',
       'Content-Type': 'application/json;charset=utf-8',
     },
   };
@@ -75,3 +75,36 @@ export const deleteArticle = async (token, slug) => {
     throw new Error(`Could not fetch, received ${err}`);
   }
 };
+
+export async function favoriteArticle(token, slug) {
+  const options = {
+    method: 'POST',
+    headers: {
+      Authorization: `Token ${token}`,
+      Accept: 'application/json',
+      'Content-Type': 'application/json;charset=utf-8',
+    },
+  };
+
+  try {
+    await fetch(`${url}articles/${slug}/favorite`, options);
+  } catch (err) {
+    throw new Error(`Could not fetch, received ${err}`);
+  }
+}
+
+export async function unfavoriteArticle(token, slug) {
+  const options = {
+    method: 'DELETE',
+    headers: {
+      Authorization: `Token ${token}`,
+      Accept: 'application/json',
+      'Content-Type': 'application/json;charset=utf-8',
+    },
+  };
+  try {
+    await fetch(`${url}articles/${slug}/favorite`, options);
+  } catch (err) {
+    throw new Error(`Could not fetch, received ${err}`);
+  }
+}

@@ -7,16 +7,16 @@ import uniqid from 'uniqid';
 import ReactMarkdown from 'react-markdown';
 
 import './article-page.scss';
-import like from '../../images/heart.svg';
 import { fetchArticle } from '../../api/async-actions';
-import { deleteArticle } from '../../api/articles-api';
+import { deleteArticle, favoriteArticle, unfavoriteArticle } from '../../api/articles-api';
+import { toggleFavoriteSingle } from '../../store/articleSlice';
 
 export default function ArticlePage() {
   const dispatch = useDispatch();
   const { slug } = useParams();
   const navigate = useNavigate();
   const { article, status } = useSelector((state) => state.articleSlice);
-  const { user } = useSelector((state) => state.userSlice);
+  const { user, isLogIn } = useSelector((state) => state.userSlice);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const token = JSON.parse(localStorage.getItem('currentUser'));
@@ -48,9 +48,23 @@ export default function ArticlePage() {
   }
 
   if (status === 'succeeded' && article) {
-    const { body, createdAt, tagList, title, author, favoritesCount, description } = article;
+    const { body, createdAt, tagList, title, author, favorited, favoritesCount, description } = article;
     const articleDate = format(parseISO(createdAt), 'MMMM d, y');
     const isAuth = user.username === author.username;
+
+    const handleFavoriteClick = () => {
+      if (isLogIn) {
+        if (favorited) {
+          unfavoriteArticle(token, slug).then(() => {
+            dispatch(toggleFavoriteSingle());
+          });
+        } else {
+          favoriteArticle(token, slug).then(() => {
+            dispatch(toggleFavoriteSingle());
+          });
+        }
+      }
+    };
 
     return (
       <li className="blog__article article">
@@ -59,10 +73,10 @@ export default function ArticlePage() {
             <div className="article__row">
               <div className="article__column">
                 <div className="article__title">{title}</div>
-                <div className="article__likes">
-                  <img src={like} alt="like" />
+                <button type="button" className="article__likes" onClick={handleFavoriteClick}>
+                  {favorited ? <div className="article__like">❤️️</div> : <div className="article__like">🤍</div>}
                   <div className="article__quantity-likes">{favoritesCount}</div>
-                </div>
+                </button>
               </div>
               <div className="article__author">{author.username}</div>
             </div>
