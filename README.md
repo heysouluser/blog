@@ -1,1 +1,1 @@
-https://blog-amber-delta.vercel.app/
+https://blog-sashabarbados.vercel.app/
