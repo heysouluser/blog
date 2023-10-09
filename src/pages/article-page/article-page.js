@@ -2,7 +2,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { format, parseISO } from 'date-fns';
-import { Spin, Modal } from 'antd';
+import { Spin, Modal, Alert } from 'antd';
 import uniqid from 'uniqid';
 import ReactMarkdown from 'react-markdown';
 
@@ -15,9 +15,10 @@ export default function ArticlePage() {
   const dispatch = useDispatch();
   const { slug } = useParams();
   const navigate = useNavigate();
-  const { article, status } = useSelector((state) => state.articleSlice);
+  const { article, status, error } = useSelector((state) => state.articleSlice);
   const { user, isLogIn } = useSelector((state) => state.userSlice);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [responseError, setRepsonseError] = useState(null);
 
   const token = JSON.parse(localStorage.getItem('currentUser'));
 
@@ -29,10 +30,15 @@ export default function ArticlePage() {
     setIsModalOpen(true);
   };
 
-  const handleOk = () => {
-    deleteArticle(token, slug);
-    setIsModalOpen(false);
-    navigate('/');
+  const handleOk = async () => {
+    try {
+      await deleteArticle(token, slug);
+      navigate('/');
+    } catch (err) {
+      setRepsonseError(err.message);
+    } finally {
+      setIsModalOpen(false);
+    }
   };
 
   const handleCancel = () => {
@@ -43,6 +49,22 @@ export default function ArticlePage() {
     return (
       <div className="loading-container">
         <Spin size="large" />
+      </div>
+    );
+  }
+
+  if (status === 'failed') {
+    return (
+      <div>
+        <Alert message={error} type="error" />
+      </div>
+    );
+  }
+
+  if (responseError) {
+    return (
+      <div>
+        <Alert message={responseError} type="error" />
       </div>
     );
   }

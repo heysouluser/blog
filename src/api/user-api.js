@@ -1,58 +1,47 @@
-import { handleResponseError } from './articles-api';
+import axios from 'axios';
 
 const url = 'https://blog.kata.academy/api/';
 
-const optionsBase = (method, body) => ({
-  method,
-  headers: {
-    accept: 'application/json',
-    'Content-Type': 'application/json;charset=utf-8',
-  },
-  body: JSON.stringify(body),
-});
-
 export const registerUser = async (body) => {
-  const requestOptions = optionsBase('POST', body);
-  const response = await fetch(`${url}users`, requestOptions);
-  const json = await response.json();
-  return json;
+  try {
+    const response = await axios.post(`${url}users`, body);
+    return response.data;
+  } catch (error) {
+    throw new Error(`Could not fetch, received ${error.message}`);
+  }
 };
 
 export const loginUser = async (body) => {
-  const requestOptions = optionsBase('POST', body);
-  const response = await fetch(`${url}users/login`, requestOptions);
-  const json = await response.json();
-  return json;
+  try {
+    const response = await axios.post(`${url}users/login`, body);
+    return response.data;
+  } catch (error) {
+    throw new Error(`Could not fetch, received ${error.message}`);
+  }
 };
 
 export const updateCurrentUser = async (body, token) => {
-  const options = {
-    method: 'PUT',
-    headers: {
-      Authorization: `Token ${token}`,
-      accept: 'application/json',
-      'Content-Type': 'application/json;charset=utf-8',
-    },
-    body: JSON.stringify(body),
-  };
-  const response = await fetch(`${url}user`, options);
-  handleResponseError(url, response);
-  const json = await response.json();
-  return json;
+  try {
+    const response = await axios.put(`${url}user`, body, {
+      headers: {
+        Authorization: `Token ${token}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    throw new Error(`Could not fetch, received ${error.message}`);
+  }
 };
 
-export async function getCurrentUser(token) {
-  const options = {
-    method: 'GET',
-    headers: {
-      Authorization: `Token ${token}`,
-      accept: 'application/json',
-      'Content-Type': 'application/json;charset=utf-8',
-    },
-    body: null,
-  };
-  const response = await fetch(`${url}user`, options);
-  handleResponseError(url, response);
-  const json = await response.json();
-  return json;
-}
+export const getCurrentUser = async (token) => {
+  try {
+    const response = await axios.get(`${url}user`, {
+      headers: {
+        Authorization: `Token ${token}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    throw new Error(`Could not fetch, received ${error.message}`);
+  }
+};

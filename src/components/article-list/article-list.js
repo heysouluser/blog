@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
-import { Pagination, Spin } from 'antd';
+import { Pagination, Spin, Alert } from 'antd';
 
 import Article from '../article';
 import { fetchArticles } from '../../api/async-actions';
@@ -9,7 +9,7 @@ import './article-list.scss';
 
 export default function ArticleList() {
   const dispatch = useDispatch();
-  const { articles, articlesCount, articleListOffset, status } = useSelector((state) => state.articleSlice);
+  const { articles, articlesCount, articleListOffset, status, error } = useSelector((state) => state.articleSlice);
 
   const token = JSON.parse(localStorage.getItem('currentUser'));
 
@@ -21,6 +21,14 @@ export default function ArticleList() {
     return (
       <div className="loading-container">
         <Spin size="large" />
+      </div>
+    );
+  }
+
+  if (status === 'failed') {
+    return (
+      <div>
+        <Alert message={error} type="error" />
       </div>
     );
   }

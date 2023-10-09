@@ -1,6 +1,8 @@
 import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Alert } from 'antd';
 
 import { updateUser } from '../../store/userSlice';
 import { updateCurrentUser } from '../../api/user-api';
@@ -11,6 +13,7 @@ export default function EditProfilePage() {
   const navigate = useNavigate();
   const { user } = useSelector((state) => state.userSlice);
   const token = JSON.parse(localStorage.getItem('currentUser'));
+  const [responseError, setRepsonseError] = useState(null);
 
   const {
     register,
@@ -22,11 +25,23 @@ export default function EditProfilePage() {
   });
 
   const onSubmitProfile = async (data) => {
-    const fetchUpdate = await updateCurrentUser({ user: data }, token);
-    console.log(fetchUpdate);
-    dispatch(updateUser(fetchUpdate.user));
-    navigate('/');
+    try {
+      const fetchUpdate = await updateCurrentUser({ user: data }, token);
+      console.log(fetchUpdate);
+      dispatch(updateUser(fetchUpdate.user));
+      navigate('/');
+    } catch (error) {
+      setRepsonseError(error.message);
+    }
   };
+
+  if (responseError) {
+    return (
+      <div>
+        <Alert message={responseError} type="error" />
+      </div>
+    );
+  }
 
   return (
     <div className="blog__form form">

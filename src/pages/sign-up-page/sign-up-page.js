@@ -43,7 +43,6 @@ export default function SignUpPage() {
         password: data.password,
       },
     });
-    console.log(fetchReg.user);
     localStorage.setItem('currentUser', JSON.stringify(fetchReg.user.token));
 
     dispatch(logIn(true));
@@ -56,7 +55,6 @@ export default function SignUpPage() {
       const { passRepeat, ...formData } = data;
 
       const fetchReg = await registerUser({ user: formData });
-      console.log(fetchReg);
       if (fetchReg.errors) {
         if (fetchReg.errors.username) {
           setUsernameError('Имя пользователя уже занято.');

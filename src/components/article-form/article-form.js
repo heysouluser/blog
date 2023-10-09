@@ -25,7 +25,6 @@ export default function ArticleForm({ articleTitle, isLoading, onSubmitArticle, 
     }
     setNewTags((prevTags) => {
       const updatedTags = [...prevTags, tag];
-      console.log(updatedTags);
       return updatedTags;
     });
   };

@@ -61,6 +61,7 @@ const articleSlice = createSlice({
       })
       .addCase(fetchArticles.rejected, (state, action) => {
         state.error = action.payload;
+        state.status = 'failed';
       })
       .addCase(fetchArticle.pending, (state) => {
         state.status = 'loading';

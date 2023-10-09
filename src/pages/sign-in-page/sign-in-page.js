@@ -26,9 +26,7 @@ export default function SignInPage() {
   const onSubmitLogin = async (data) => {
     setIsLoading(true);
     const fetchLogin = await loginUser({ user: data });
-    console.log(fetchLogin);
     const { user: newUser } = fetchLogin;
-    console.log(newUser);
 
     if (newUser) {
       const mergedUser = {
