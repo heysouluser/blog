@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Alert } from 'antd';
 
-import ArticleForm from '../../components/article-form';
+import { ArticleForm } from '../../components/article-form/article-form';
 import { createArticle } from '../../api/articles-api';
 import './create-article-page.scss';
 

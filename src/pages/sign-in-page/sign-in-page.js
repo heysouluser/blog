@@ -2,7 +2,7 @@ import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Spin } from 'antd';
+import { Spin, Alert } from 'antd';
 import './sign-in-page.scss';
 
 import { loginUser } from '../../api/user-api';
@@ -12,7 +12,7 @@ export default function SignInPage() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
-  const [isError, setIsError] = useState(false);
+  const [responseError, setRepsonseError] = useState(null);
   const { user } = useSelector((state) => state.userSlice);
 
   const {
@@ -25,35 +25,42 @@ export default function SignInPage() {
 
   const onSubmitLogin = async (data) => {
     setIsLoading(true);
-    const fetchLogin = await loginUser({ user: data });
-    const { user: newUser } = fetchLogin;
+    try {
+      const fetchLogin = await loginUser({ user: data });
+      const { user: newUser } = fetchLogin;
 
-    if (newUser) {
-      const mergedUser = {
-        ...newUser,
-        bio: user.bio,
-        image: user.image,
-      };
+      if (newUser) {
+        const mergedUser = {
+          ...newUser,
+          bio: user.bio,
+          image: user.image,
+        };
 
-      localStorage.setItem('currentUser', JSON.stringify(mergedUser.token));
-      dispatch(setUser(mergedUser));
-      dispatch(logIn(true));
-      setIsError(false);
-      navigate('/');
-    } else {
-      setIsError(true);
+        localStorage.setItem('currentUser', JSON.stringify(mergedUser.token));
+        dispatch(setUser(mergedUser));
+        dispatch(logIn(true));
+        navigate('/');
+      }
+    } catch (error) {
+      setRepsonseError(`${error.message} - Вы ввели неверные данные, попробуйте снова`);
+    } finally {
+      setIsLoading(false);
     }
-
-    setIsLoading(false);
   };
 
   const validateErr = (inputType) => (
     <div style={{ color: 'red' }}>{errors?.[inputType] && <p>{errors?.[inputType]?.message || 'Error!'}</p>}</div>
   );
 
-  const isErr = isError && <div className="form__err">Email or password is invalid.</div>;
-
   const spin = <div className="spin-container">{isLoading && <Spin />}</div>;
+
+  if (responseError) {
+    return (
+      <div>
+        <Alert message={responseError} type="error" />
+      </div>
+    );
+  }
 
   return (
     <>
@@ -74,7 +81,6 @@ export default function SignInPage() {
               className={`form__input ${errors?.email ? ' error' : ''}`}
               type="email"
               placeholder="Email address"
-              onChange={() => setIsError(false)}
             />
             {validateErr('email')}
           </label>
@@ -95,11 +101,9 @@ export default function SignInPage() {
               className={`form__input ${errors?.password ? ' error' : ''}`}
               type="password"
               placeholder="Password"
-              onChange={() => setIsError(false)}
             />
             {validateErr('password')}
           </label>
-          {isErr}
           <input className="form__button" type="submit" value={isLoading ? 'Loading' : 'Login'} disabled={isLoading} />
         </form>
         <div className="form__sign-in">

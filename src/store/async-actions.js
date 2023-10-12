@@ -1,6 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
-import { getArticles, getArticle } from './articles-api';
+import { getArticles, getArticle } from '../api/articles-api';
 
 export const fetchArticles = createAsyncThunk(
   'articles/fetchArticles',

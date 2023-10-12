@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import { Pagination, Spin, Alert } from 'antd';
 
 import Article from '../article';
-import { fetchArticles } from '../../api/async-actions';
+import { fetchArticles } from '../../store/async-actions';
 import { setOffset } from '../../store/articleSlice';
 import './article-list.scss';
 

@@ -7,7 +7,7 @@ import uniqid from 'uniqid';
 import ReactMarkdown from 'react-markdown';
 
 import './article-page.scss';
-import { fetchArticle } from '../../api/async-actions';
+import { fetchArticle } from '../../store/async-actions';
 import { deleteArticle, favoriteArticle, unfavoriteArticle } from '../../api/articles-api';
 import { toggleFavoriteSingle } from '../../store/articleSlice';
 

@@ -3,9 +3,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Spin, Alert } from 'antd';
 
-import { fetchArticle } from '../../api/async-actions';
+import { fetchArticle } from '../../store/async-actions';
 import { updateArticle } from '../../api/articles-api';
-import ArticleForm from '../../components/article-form';
+import { ArticleForm } from '../../components/article-form/article-form';
 import './edit-article-page.scss';
 
 export default function EditArticlePage() {

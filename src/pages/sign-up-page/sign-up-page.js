@@ -2,7 +2,9 @@ import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useForm } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
-import { Spin } from 'antd';
+import { Spin, Alert } from 'antd';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from 'yup';
 
 import './sign-up-page.scss';
 import { setUser, logIn } from '../../store/userSlice';
@@ -12,6 +14,20 @@ export default function SignUpPage() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  const signUpSchema = yup.object().shape({
+    username: yup
+      .string()
+      .required('Поле обязательно к заполнению')
+      .min(3, 'Должно быть минимум 3 символа')
+      .max(20, 'Должно быть максимум 20 символов'),
+    email: yup.string().email('Введите корректный email-адрес').required('Поле обязательно к заполнению'),
+    password: yup
+      .string()
+      .required('Поле обязательно к заполнению')
+      .min(6, 'Должно быть минимум 6 символов')
+      .max(40, 'Должно быть максимум 40 символов'),
+  });
+
   const {
     register,
     formState: { errors },
@@ -19,13 +35,13 @@ export default function SignUpPage() {
     handleSubmit,
     reset,
   } = useForm({
+    resolver: yupResolver(signUpSchema),
     mode: 'onBlur',
   });
 
   const [isChecked, setIsChecked] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [usernameError, setUsernameError] = useState('');
-  const [emailError, setEmailError] = useState('');
+  const [responseError, setRepsonseError] = useState(null);
 
   const handleSuccessfulSignUp = (data, fetchReg) => {
     dispatch(
@@ -55,19 +71,12 @@ export default function SignUpPage() {
       const { passRepeat, ...formData } = data;
 
       const fetchReg = await registerUser({ user: formData });
-      if (fetchReg.errors) {
-        if (fetchReg.errors.username) {
-          setUsernameError('Имя пользователя уже занято.');
-        } else if (fetchReg.errors.email) {
-          setEmailError('Email уже занят');
-        }
-      }
 
       handleSuccessfulSignUp(data, fetchReg);
       reset();
       navigate('/');
     } catch (error) {
-      console.error('An error occurred:', error);
+      setRepsonseError(`${error.message} - Вы ввели уже существующее имя или почту, попробуйте снова.`);
     } finally {
       setIsLoading(false);
     }
@@ -77,14 +86,15 @@ export default function SignUpPage() {
     <div style={{ color: 'red' }}>{errors?.[inputType] && <p>{errors?.[inputType]?.message || 'Error!'}</p>}</div>
   );
 
-  const serverErr = (errType) =>
-    errType && (
-      <div className="error-message" style={{ color: 'red' }}>
-        {errType}
+  const spin = <div className="spin-container">{isLoading && <Spin />}</div>;
+
+  if (responseError) {
+    return (
+      <div>
+        <Alert message={responseError} type="error" />
       </div>
     );
-
-  const spin = <div className="spin-container">{isLoading && <Spin />}</div>;
+  }
 
   return (
     <>
@@ -95,61 +105,27 @@ export default function SignUpPage() {
           <label className="form__label">
             Username
             <input
-              {...register('username', {
-                required: 'Поле обязательно к заполнению',
-                minLength: {
-                  value: 3,
-                  message: 'Должно быть минимум 3 символа',
-                },
-                maxLength: {
-                  value: 20,
-                  message: 'Должно быть максимум 20 символов',
-                },
-              })}
+              {...register('username')}
               className={`form__input ${errors?.username ? ' error' : ''}`}
               type="text"
               placeholder="Username"
-              onChange={() => {
-                setUsernameError('');
-              }}
             />
             {validateErr('username')}
-            {serverErr(usernameError)}
           </label>
           <label className="form__label">
             Email address
             <input
-              {...register('email', {
-                required: 'Поле обязательно к заполнению',
-                pattern: {
-                  value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
-                  message: 'Введите корректный email-адрес',
-                },
-              })}
+              {...register('email')}
               className={`form__input ${errors?.email ? ' error' : ''}`}
               type="email"
               placeholder="Email address"
-              onChange={() => {
-                setEmailError('');
-              }}
             />
             {validateErr('email')}
-            {serverErr(emailError)}
           </label>
           <label className="form__label">
             Password
             <input
-              {...register('password', {
-                required: 'Поле обязательно к заполнению',
-                minLength: {
-                  value: 6,
-                  message: 'Должно быть минимум 6 символов',
-                },
-                maxLength: {
-                  value: 40,
-                  message: 'Должно быть максимум 40 символов',
-                },
-              })}
+              {...register('password')}
               className={`form__input ${errors?.password ? ' error' : ''}`}
               type="password"
               placeholder="Password"

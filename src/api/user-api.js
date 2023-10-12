@@ -1,5 +1,7 @@
 import axios from 'axios';
 
+import { createAxiosDefaultParams } from './articles-api';
+
 const url = 'https://blog.kata.academy/api/';
 
 export const registerUser = async (body) => {
@@ -21,12 +23,9 @@ export const loginUser = async (body) => {
 };
 
 export const updateCurrentUser = async (body, token) => {
+  const axiosDefaultParams = createAxiosDefaultParams(token);
   try {
-    const response = await axios.put(`${url}user`, body, {
-      headers: {
-        Authorization: `Token ${token}`,
-      },
-    });
+    const response = await axiosDefaultParams.put('user', body);
     return response.data;
   } catch (error) {
     throw new Error(`Could not fetch, received ${error.message}`);
@@ -34,12 +33,9 @@ export const updateCurrentUser = async (body, token) => {
 };
 
 export const getCurrentUser = async (token) => {
+  const axiosDefaultParams = createAxiosDefaultParams(token);
   try {
-    const response = await axios.get(`${url}user`, {
-      headers: {
-        Authorization: `Token ${token}`,
-      },
-    });
+    const response = await axiosDefaultParams.get('user');
     return response.data;
   } catch (error) {
     throw new Error(`Could not fetch, received ${error.message}`);

@@ -1,21 +1,17 @@
 import axios from 'axios';
 
-const url = 'https://blog.kata.academy/api/';
-
-// export const getArticles = async (token, offset) => {
-//   const response = await fetch(`${url}articles?offset=${offset}&limit=5`, requestOptions(token));
-//   handleResponseError(url, response);
-//   const body = await response.json();
-//   return body;
-// };
+export const createAxiosDefaultParams = (token) =>
+  axios.create({
+    baseURL: 'https://blog.kata.academy/api/',
+    headers: {
+      Authorization: `Token ${token}`,
+    },
+  });
 
 export const getArticles = async (token, offset) => {
+  const axiosDefaultParams = createAxiosDefaultParams(token);
   try {
-    const response = await axios.get(`${url}articles?offset=${offset}&limit=5`, {
-      headers: {
-        Authorization: `Token ${token}`,
-      },
-    });
+    const response = await axiosDefaultParams.get(`articles?offset=${offset}&limit=5`);
     return response.data;
   } catch (error) {
     throw new Error(`Could not fetch, received ${error.message}`);
@@ -23,12 +19,9 @@ export const getArticles = async (token, offset) => {
 };
 
 export const getArticle = async (token, slug) => {
+  const axiosDefaultParams = createAxiosDefaultParams(token);
   try {
-    const response = await axios.get(`${url}articles/${slug}`, {
-      headers: {
-        Authorization: `Token ${token}`,
-      },
-    });
+    const response = await axiosDefaultParams.get(`articles/${slug}`);
     return response.data;
   } catch (error) {
     throw new Error(`Could not fetch, received ${error.message}`);
@@ -36,12 +29,9 @@ export const getArticle = async (token, slug) => {
 };
 
 export const createArticle = async (data, token) => {
+  const axiosDefaultParams = createAxiosDefaultParams(token);
   try {
-    const response = await axios.post(`${url}articles`, data, {
-      headers: {
-        Authorization: `Token ${token}`,
-      },
-    });
+    const response = await axiosDefaultParams.post('articles', data);
     return response.data;
   } catch (error) {
     throw new Error(`Could not fetch, received ${error.message}`);
@@ -49,12 +39,9 @@ export const createArticle = async (data, token) => {
 };
 
 export const updateArticle = async (data, token, slug) => {
+  const axiosDefaultParams = createAxiosDefaultParams(token);
   try {
-    const response = await axios.put(`${url}articles/${slug}`, data, {
-      headers: {
-        Authorization: `Token ${token}`,
-      },
-    });
+    const response = await axiosDefaultParams.put(`articles/${slug}`, data);
     return response.data;
   } catch (error) {
     throw new Error(`Could not fetch, received ${error.message}`);
@@ -62,36 +49,27 @@ export const updateArticle = async (data, token, slug) => {
 };
 
 export const deleteArticle = async (token, slug) => {
+  const axiosDefaultParams = createAxiosDefaultParams(token);
   try {
-    await axios.delete(`${url}articles/${slug}`, {
-      headers: {
-        Authorization: `Token ${token}`,
-      },
-    });
+    await axiosDefaultParams.delete(`articles/${slug}`);
   } catch (error) {
     throw new Error(`Could not fetch, received ${error.message}`);
   }
 };
 
 export const favoriteArticle = async (token, slug) => {
+  const axiosDefaultParams = createAxiosDefaultParams(token);
   try {
-    await axios.post(`${url}articles/${slug}/favorite`, null, {
-      headers: {
-        Authorization: `Token ${token}`,
-      },
-    });
+    await axiosDefaultParams.post(`articles/${slug}/favorite`);
   } catch (error) {
     throw new Error(`Could not fetch, received ${error.message}`);
   }
 };
 
 export const unfavoriteArticle = async (token, slug) => {
+  const axiosDefaultParams = createAxiosDefaultParams(token);
   try {
-    await axios.delete(`${url}articles/${slug}/favorite`, {
-      headers: {
-        Authorization: `Token ${token}`,
-      },
-    });
+    await axiosDefaultParams.delete(`articles/${slug}/favorite`);
   } catch (error) {
     throw new Error(`Could not fetch, received ${error.message}`);
   }

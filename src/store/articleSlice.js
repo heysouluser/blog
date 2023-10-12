@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-import { fetchArticles, fetchArticle } from '../api/async-actions';
+import { fetchArticles, fetchArticle } from './async-actions';
 
 const initialState = {
   articles: [],

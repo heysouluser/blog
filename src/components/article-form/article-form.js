@@ -3,17 +3,27 @@ import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import uniqid from 'uniqid';
 import { Spin } from 'antd';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from 'yup';
 
 import './article-form.scss';
 import ErrorPage from '../../pages/error-page';
 
-export default function ArticleForm({ articleTitle, isLoading, onSubmitArticle, body, tagList, title, description }) {
+export function ArticleForm({ articleTitle, isLoading, onSubmitArticle, body, tagList, title, description }) {
   const { isLogIn } = useSelector((state) => state.userSlice);
+
+  const articleSchema = yup.object().shape({
+    title: yup.string().required('Поле обязательно к заполнению'),
+    description: yup.string().required('Поле обязательно к заполнению'),
+    body: yup.string().required('Поле обязательно к заполнению'),
+  });
+
   const {
     register,
     formState: { errors },
     handleSubmit,
   } = useForm({
+    resolver: yupResolver(articleSchema),
     mode: 'onBlur',
   });
 
@@ -61,9 +71,7 @@ export default function ArticleForm({ articleTitle, isLoading, onSubmitArticle, 
                 type="text"
                 placeholder="Title"
                 className={`form__input ${errors?.title ? ' error' : ''}`}
-                {...register('title', {
-                  required: 'Поле обязательно к заполнению',
-                })}
+                {...register('title')}
                 defaultValue={title}
               />
               {validateErr('title')}
@@ -74,9 +82,7 @@ export default function ArticleForm({ articleTitle, isLoading, onSubmitArticle, 
                 type="text"
                 placeholder="Description"
                 className={`form__input ${errors?.description ? ' error' : ''}`}
-                {...register('description', {
-                  required: 'Поле обязательно к заполнению',
-                })}
+                {...register('description')}
                 defaultValue={description}
               />
               {validateErr('description')}

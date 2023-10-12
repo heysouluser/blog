@@ -27,7 +27,6 @@ export default function EditProfilePage() {
   const onSubmitProfile = async (data) => {
     try {
       const fetchUpdate = await updateCurrentUser({ user: data }, token);
-      console.log(fetchUpdate);
       dispatch(updateUser(fetchUpdate.user));
       navigate('/');
     } catch (error) {

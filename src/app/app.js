@@ -2,6 +2,7 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import { useEffect, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
+import { ROUTES } from '../routes/routes';
 import ArticlePage from '../pages/article-page';
 import ErrorPage from '../pages/error-page';
 import HomePage from '../pages/home-page';
@@ -26,7 +27,6 @@ export default function App() {
     if (tokenAuth) {
       const currentUser = await getCurrentUser(tokenAuth);
       if (currentUser) {
-        console.log();
         dispatch(logIn(true));
         dispatch(
           setUser({
@@ -48,16 +48,16 @@ export default function App() {
   return (
     <div className="blog">
       <Routes>
-        <Route path="/" element={<Layout />}>
+        <Route path={ROUTES.HOME} element={<Layout />}>
           <Route index element={<HomePage />} />
-          <Route path="/articles" element={<Navigate to="/" replace />} />
-          <Route path="/articles/:slug" element={<ArticlePage />} />
-          <Route path="/articles/:slug/edit" element={<EditArticlePage />} />
-          <Route path="/sign-in" element={<SignInPage />} />
-          <Route path="/sign-up" element={<SignUpPage />} />
-          <Route path="/profile" element={<EditProfilePage />} />
-          <Route path="/new-article" element={<CreateArticlePage />} />
-          <Route path="*" element={<ErrorPage />} />
+          <Route path="/articles" element={<Navigate to={ROUTES.HOME} replace />} />
+          <Route path={ROUTES.ARTICLE} element={<ArticlePage />} />
+          <Route path={ROUTES.EDIT_ARTICLE} element={<EditArticlePage />} />
+          <Route path={ROUTES.SIGN_IN} element={<SignInPage />} />
+          <Route path={ROUTES.SIGN_UP} element={<SignUpPage />} />
+          <Route path={ROUTES.PROFILE} element={<EditProfilePage />} />
+          <Route path={ROUTES.NEW_ARTICLE} element={<CreateArticlePage />} />
+          <Route path={ROUTES.ERROR} element={<ErrorPage />} />
         </Route>
       </Routes>
     </div>
